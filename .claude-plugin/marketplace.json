@@ -1,0 +1,47 @@
+{
+  "name": "solohq",
+  "owner": {
+    "name": "SuccessTeam Marketing Group",
+    "email": "greg@successteam1.com"
+  },
+  "metadata": {
+    "description": "SoloHQ: the command center for a one-person business. Part of the Sovereign Agency OS. Installs a local AI operating system that knows your voice, your business, and your goals."
+  },
+  "plugins": [
+    {
+      "name": "core",
+      "source": "./plugins/core",
+      "description": "The SoloHQ core: sets up your vault, your memory, and your assistant, then runs the AI Identity Blueprint so it sounds like you. The free foundation of the Sovereign Agency OS.",
+      "version": "1.0.0",
+      "author": {
+        "name": "SoloHQ"
+      },
+      "keywords": [
+        "solohq",
+        "sovereign-agency-os",
+        "ai-assistant",
+        "second-brain",
+        "onboarding",
+        "obsidian",
+        "memory",
+        "identity"
+      ]
+    },
+    {
+      "name": "agentic-os",
+      "source": "./plugins/agentic-os",
+      "description": "The SoloHQ Obsidian dashboard: a command-center vault with auto-installed plugins (Dataview, Terminal, Homepage) and Home + per-profile dashboards wired to Claude. Free.",
+      "version": "1.0.0",
+      "author": {
+        "name": "SoloHQ"
+      },
+      "keywords": [
+        "solohq",
+        "obsidian",
+        "dashboard",
+        "agentic-os",
+        "second-brain"
+      ]
+    }
+  ]
+}

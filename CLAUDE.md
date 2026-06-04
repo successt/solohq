@@ -1,0 +1,53 @@
+# SoloHQ
+
+The free foundation of the **Sovereign Agency OS**: a local AI operating system that knows your voice, your business, and your goals. Distributed as a small Claude Code plugin marketplace.
+
+## What This Is
+
+This repo is the SoloHQ marketplace. It ships two free plugins:
+
+| Plugin | Skills | Purpose |
+|--------|--------|---------|
+| **core** | `os-setup`, `ai-identity-blueprint` | Bootstraps your vault (folders, `CLAUDE.md`, memory system), then runs the AI Identity Blueprint so your assistant sounds like you. |
+| **agentic-os** | `agentic-os-obsidian` | Installs a command-center dashboard inside your Obsidian vault (5 bundled plugins, Home + per-profile + Vault Overview pages, button bar wired to Claude prompts). |
+
+## Install (for members)
+
+```
+/plugin marketplace add successt/solohq
+/plugin install core@solohq
+/plugin install agentic-os@solohq
+```
+
+Then run `/setup` to bootstrap your vault, and say `build my blueprint` to capture your voice.
+
+## Repo Layout
+
+```
+.claude-plugin/
+  marketplace.json   - the two published plugins
+  skills-map.json    - which skills belong to which plugin
+shared-skills/       - single source of truth for every skill
+plugins/             - GENERATED from shared-skills/ (do not edit by hand)
+sync-skills.sh       - regenerates plugins/ from shared-skills/ + skills-map.json
+build-zips.sh        - builds installable zips into dist/
+```
+
+## Development
+
+All skills live in `shared-skills/` as the single source of truth. `plugins/*/skills/` is generated, never edit it directly (sync overwrites it).
+
+Editing workflow:
+1. Edit the skill in `shared-skills/<skill>/`
+2. If adding a skill or changing plugin membership, update `.claude-plugin/skills-map.json`
+3. Run `./sync-skills.sh`
+
+Before every push, run `./sync-skills.sh` so `plugins/` matches `shared-skills/` + `skills-map.json`.
+
+## Building Distributable Zips
+
+Run `./build-zips.sh` to generate zips in `dist/`. It runs `sync-skills.sh` first, reads `marketplace.json`, and emits one zip per plugin plus a full marketplace zip.
+
+## License
+
+MIT. See `LICENSE` for full copyright and attribution.

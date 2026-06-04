@@ -1,0 +1,8 @@
+{
+  "name": "core",
+  "description": "The SoloHQ core: sets up your vault, your memory, and your assistant, then runs the AI Identity Blueprint so it sounds like you. The free foundation of the Sovereign Agency OS.",
+  "version": "1.0.0",
+  "author": {
+    "name": "SoloHQ"
+  }
+}

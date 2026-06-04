@@ -1,0 +1,24 @@
+{
+  "departments": {
+    "core": {
+      "skills": {
+        "os-setup": {
+          "displayName": "OS Setup",
+          "summary": "Bootstrap vault structure with mode selection and personalized onboarding"
+        },
+        "ai-identity-blueprint": {
+          "displayName": "AI Identity Blueprint",
+          "summary": "Find Your Voice: a guided interview that captures how you communicate and writes it into Context/me.md so your assistant sounds like you."
+        }
+      }
+    },
+    "agentic-os": {
+      "skills": {
+        "agentic-os-obsidian": {
+          "displayName": "Agentic OS Obsidian",
+          "summary": "Set up an agentic OS inside an Obsidian vault — command-center dashboard + 5 auto-installed plugins, Home/per-profile/Vault Overview pages, button bar wired to Claude prompts"
+        }
+      }
+    }
+  }
+}
