@@ -14,8 +14,12 @@ type: identity
 status: active
 tags: [me, identity, blueprint, voice]
 date: <YYYY-MM-DD>
+onboarding: part2-pending
+part1_done: <YYYY-MM-DD>
 ---
 ```
+
+The `onboarding` and `part1_done` fields are the onboarding-state flag. Part 1 sets `onboarding: part2-pending` and `part1_done` to today's date. Part 2 sets `onboarding: complete` when it finishes. The member `CLAUDE.md` startup rule reads these to know whether (and when) to gently offer Part 2. Do not remove them.
 
 ### Section 1, How I Communicate
 The voice portrait, built from Phase 3 plus the gap interview. Cover, in prose (not bullets where a paragraph belongs):

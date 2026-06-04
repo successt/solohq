@@ -32,6 +32,8 @@ If those files do not exist, the member has not done Part 1. Do not fake it. Sen
 
 If they do exist, open by proving continuity: *"Okay, I've got your voice loaded. Let me show you what I picked up, and then we go deeper."* That single move re-establishes the magic after a gap.
 
+**Enforce the gap.** Check `part1_done` in `Context/me.md` frontmatter. If it is today's date, the member just finished Part 1 in this same session and is spent, which is exactly when this heavy pass goes worst. Gently suggest waiting: *"You just did your voice work today. This next part is heavier, it goes deeper into your story and the honest gaps, and it lands far better when you come at it fresh. I'd love for you to come back another day. But if you're genuinely up for it right now, we can keep going."* Let them choose; never force the wait. If `part1_done` is an earlier date (the intended case), proceed.
+
 ### Rule 2: The data gate (scale your boldness to what you actually have)
 
 This part asks you to reflect a person back to themselves, name patterns, and audit a business. That is powerful when you have evidence and **trust-destroying when you guess.** A member who just did one voice session has nowhere near the data of a long-term member.
@@ -113,6 +115,7 @@ Enrich the vault with what this part surfaced (read back and confirm each before
 - `Context/me.md`: fill or deepen the **My Business** and **Who I Serve Best** sections, and add a **My Story** section.
 - Save the Mirror reads and the Honest Audit as a working note the member can revisit.
 - Save the Fix as a real draft in their own files so it is usable, not buried in chat.
+- **Close the onboarding flag.** Set `onboarding: complete` in `Context/me.md` frontmatter. This stops the system from offering Part 2 again, onboarding is now finished.
 
 ### Module 7: The Letter (the capstone)
 

@@ -111,6 +111,8 @@ Write to:
 
 Create the folders if they are not there. If `Context/me.md` already exists, this is a refresh: show them what changed before overwriting.
 
+**Stamp the onboarding flag.** In `Context/me.md` frontmatter, set `onboarding: part2-pending` and `part1_done:` to today's date (resolve the real date). This is how the system knows, in a later session, to gently offer Part 2. Do not run Part 2 now; it is a separate, later session by design.
+
 ### Phase 7, Hand off
 
 Close warm and concrete: *"Done. From here on, this system already knows how you think, what you have built, and who you built it for. You will feel it in the very next conversation."*
