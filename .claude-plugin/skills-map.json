@@ -9,6 +9,10 @@
         "ai-identity-blueprint": {
           "displayName": "AI Identity Blueprint",
           "summary": "Find Your Voice: a guided interview that captures how you communicate and writes it into Context/me.md so your assistant sounds like you."
+        },
+        "business-and-story-map": {
+          "displayName": "Map Your Business & Story",
+          "summary": "Part 2 of onboarding: builds on the voice profile to go deep on the member's business, story, and honest gaps, then produces a usable fix in their voice."
         }
       }
     },

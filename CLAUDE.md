@@ -8,7 +8,7 @@ This repo is the SoloHQ marketplace. It ships two free plugins:
 
 | Plugin | Skills | Purpose |
 |--------|--------|---------|
-| **core** | `os-setup`, `ai-identity-blueprint` | Bootstraps your vault (folders, `CLAUDE.md`, memory system), then runs the AI Identity Blueprint so your assistant sounds like you. |
+| **core** | `os-setup`, `ai-identity-blueprint`, `business-and-story-map` | Bootstraps your vault (folders, `CLAUDE.md`, memory system), then runs the two-part identity onboarding: Part 1 (Find Your Voice) and Part 2 (Map Your Business & Story). |
 | **agentic-os** | `agentic-os-obsidian` | Installs a command-center dashboard inside your Obsidian vault (5 bundled plugins, Home + per-profile + Vault Overview pages, button bar wired to Claude prompts). |
 
 ## Install (for members)

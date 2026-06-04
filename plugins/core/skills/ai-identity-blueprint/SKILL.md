@@ -115,7 +115,7 @@ Create the folders if they are not there. If `Context/me.md` already exists, thi
 
 Close warm and concrete: *"Done. From here on, this system already knows how you think, what you have built, and who you built it for. You will feel it in the very next conversation."*
 
-Then point, without pushing, at what is next. The Blueprint tells the system *who they are*. The next builders turn that into *what they build*: their business strategy, their offer, their roadmap. Name it as the natural next step, not a sales pitch.
+Then point, without pushing, at what is next. Part 1 captured *who they are*. **Part 2, Map Your Business & Story, goes deeper on what they have built, where they came from, and the honest gaps holding them back, and it is free too.** It is a heavier, reflective pass, so it is fine to let them rest first if this was a full session. Tell them they can run it whenever they are ready by saying *map my business* (or *part 2*). Name it as the natural next step, not a sales pitch.
 
 ---
 

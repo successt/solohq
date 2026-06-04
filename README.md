@@ -31,9 +31,10 @@ Then run setup:
 ## What happens when you set it up
 
 1. **Setup builds your vault.** It creates your folder structure, your memory system, and your assistant's instructions, all as plain markdown in a folder you own. Your assistant's memory is wired in automatically, no technical steps.
-2. **The AI Identity Blueprint makes it yours.** A short interview captures how you actually communicate, so your assistant writes like you, not like generic AI. This is the moment it stops feeling like a tool and starts feeling like it knows you. Just say "build my blueprint."
+2. **Part 1, Find Your Voice.** A short interview captures how you actually communicate, so your assistant writes like you, not like generic AI. This is the moment it stops feeling like a tool and starts feeling like it knows you. Just say "build my blueprint."
+3. **Part 2, Map Your Business & Story.** A deeper, reflective pass that maps what you have built, where you came from, and the honest gaps holding you back, then hands you a real fix in your own voice. Come back to it whenever you are ready by saying "map my business." Also free.
 
-That is the free foundation. The deeper builders and the goal-getting app live inside the 7-Figure Path membership.
+That is the free foundation: your assistant knows your voice, your business, and your story. The goal-getting app and the deeper membership builders live inside the 7-Figure Path.
 
 ## Your data is yours
 
