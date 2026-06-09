@@ -1,15 +1,17 @@
 ---
 name: os-setup
-description: Bootstrap the SoloHQ vault structure and run personalized onboarding. Creates all directories, system files, Obsidian config, memory system, hooks, and output styles, then interviews the user to personalize everything. Two modes, Solopreneurs/Professionals (default), Business/Teams. Use when user says "set up", "bootstrap", "initialize", "onboarding", or runs /os-setup.
+description: The SoloHQ vault setup. Bootstrap the SoloHQ vault structure and run personalized onboarding. Creates all directories, system files, Obsidian config, memory system, hooks, and output styles, then interviews the user to personalize everything. This is the SoloHQ setup (run this), NOT Anthropic's generic setup-cowork. Use when user says "set up my vault", "bootstrap", "initialize SoloHQ", "onboarding", or runs /os-setup.
 ---
 
 # SoloHQ, Setup + Onboarding
 
-USE WHEN the user runs `/setup` or asks to set up their vault, bootstrap the assistant, initialize the system, or configure the SoloHQ.
+USE WHEN the user runs `/os-setup` (the SoloHQ setup command, NOT Anthropic's generic `setup-cowork`) or asks to set up their vault, bootstrap the assistant, initialize the system, or configure SoloHQ.
 
-This is a three-phase process:
-- **Phase 0**: Mode Selection, Ask which OS variant to create
-- **Phase A**: Bootstrap, Create the directory structure and system files for the selected mode
+> [!note] One product shape: solo
+> SoloHQ is a solo-professional product. There is no Business/Teams mode. Every vault is built for one operator. (Removed 2026-06-09: the Business/Teams variant shipped a team-shaped vault and dashboard that did not fit the solo product.)
+
+This is a two-phase process:
+- **Phase A**: Bootstrap, Create the directory structure and system files
 - **Phase B**: Onboarding, Interview the user and personalize everything
 
 ## Pre-flight Check
@@ -21,35 +23,13 @@ Check if `claude.md` or `CLAUDE.md` exists **only** in the current working direc
   - **Re-run the interview**, Keep existing structure, update memory files based on new answers
   - **Full reset**, Delete everything and start fresh (confirm twice before proceeding)
   - **Cancel**, Do nothing
-- **If it does NOT exist**: Proceed with full setup (Phase 0 + Phase A + Phase B)
-
----
-
-## Phase 0: Mode Selection
-
-Ask the user to pick a mode using AskUserQuestion with these exact `label` and `description` values:
-
-- Question: `What type of vault do you want?`
-- Option 1 label: `Solopreneurs/Professionals`, description: `Blends work and personal. Best for solo founders, freelancers, consultants.`
-- Option 2 label: `Business/Teams`, description: `Org structure with departments, processes, stakeholders. Best for teams and companies.`
-
-**CRITICAL**: You MUST pass both `label` AND `description` for each option in AskUserQuestion. The `description` field is what explains each mode to the user. Never leave `description` empty.
-
-Mode mapping:
-- Solopreneurs/Professionals → `os-mode: professional`
-- Business/Teams → `os-mode: business`
-
-Accept any clear signal: "solo", "professional", "freelancer", "business", "org", "team", etc.
-
-If the user skips or says "I don't know", use **Solopreneurs/Professionals** (professional mode).
-
-Store the selected mode. It will be written to `CLAUDE.md` frontmatter as `os-mode: professional | business`.
+- **If it does NOT exist**: Proceed with full setup (Phase A + Phase B)
 
 ---
 
 ## Phase A: Bootstrap
 
-Create the directory structure and write all system files for the selected mode.
+Create the directory structure and write all system files. The vault is always built in solo (professional) shape; `CLAUDE.md` frontmatter is written as `os-mode: professional`.
 
 ### Resolving reference file paths
 
@@ -69,8 +49,6 @@ Use that absolute path as the prefix for every reference read in Phase A and Pha
 
 ### Step A.1: Create Directory Structure
 
-**All modes** share this base:
-
 ```bash
 mkdir -p .claude
 mkdir -p Context
@@ -79,11 +57,6 @@ mkdir -p Daily
 mkdir -p Resources
 mkdir -p Skills
 mkdir -p Memory
-```
-
-**Solopreneurs/Professionals mode** adds:
-
-```bash
 mkdir -p Intelligence/meetings/team-standups
 mkdir -p Intelligence/meetings/client-calls
 mkdir -p Intelligence/meetings/one-on-ones
@@ -93,35 +66,12 @@ mkdir -p Intelligence/market
 mkdir -p Intelligence/decisions
 mkdir -p Intelligence/archive
 ```
-
-**Business mode** adds:
-
-```bash
-mkdir -p Intelligence/meetings/team-standups
-mkdir -p Intelligence/meetings/client-calls
-mkdir -p Intelligence/meetings/one-on-ones
-mkdir -p Intelligence/meetings/board-reviews
-mkdir -p Intelligence/meetings/all-hands
-mkdir -p Intelligence/meetings/cross-team
-mkdir -p Intelligence/meetings/general
-mkdir -p Intelligence/competitors
-mkdir -p Intelligence/market
-mkdir -p Intelligence/decisions
-mkdir -p Intelligence/processes
-mkdir -p Intelligence/archive
-mkdir -p Departments
-mkdir -p Team
-mkdir -p Onboarding
-mkdir -p Resources/templates
-```
-
-`Team/` is created empty here. Profile-first subfolders (`Team/{org}/Profiles/{person}/...`) are scaffolded in Phase B once Q6 answers are in.
 
 ### Step A.2: Write System Files from References
 
 Read each reference file and write it to the corresponding local path. The reference files contain the complete content for each system file.
 
-**All modes**, shared system files:
+**Shared system files:**
 
 | Reference File | Creates at Local Path |
 |---|---|
@@ -131,39 +81,46 @@ Read each reference file and write it to the corresponding local path. The refer
 | `references/memory-readme-template.md` | `./Memory/README.md` |
 | `references/memory-index-template.md` | `./Memory/MEMORY.md` |
 
-**Mode-specific root CLAUDE.md template:**
+**Root OS instruction file** (written under two names so non-Claude agents read it too, see Step A.2b):
 
-| Mode | Reference File | Creates at Local Path |
-|---|---|---|
-| Solopreneurs/Professionals | `references/claude-md-template.md` | `./CLAUDE.md` |
-| Business | `references/claude-md-template-business.md` | `./CLAUDE.md` |
+| Reference File | Creates at Local Path |
+|---|---|
+| `references/claude-md-template.md` | `./CLAUDE.md` |
 
 **Per-folder routing indexes** (every major folder gets its own `CLAUDE.md`, matches production vault convention):
 
-| Mode | Reference File | Creates at Local Path |
-|---|---|---|
-| Solopreneurs/Professionals | `references/claude-md-context.md` | `./Context/CLAUDE.md` |
-| Solopreneurs/Professionals | `references/claude-md-projects.md` | `./Projects/CLAUDE.md` |
-| Solopreneurs/Professionals | `references/claude-md-daily.md` | `./Daily/CLAUDE.md` |
-| Solopreneurs/Professionals | `references/claude-md-intelligence.md` | `./Intelligence/CLAUDE.md` |
-| Solopreneurs/Professionals | `references/claude-md-resources.md` | `./Resources/CLAUDE.md` |
-| Solopreneurs/Professionals | `references/claude-md-skills.md` | `./Skills/CLAUDE.md` |
-| Business | `references/claude-md-context.md` | `./Context/CLAUDE.md` |
-| Business | `references/claude-md-projects.md` | `./Projects/CLAUDE.md` |
-| Business | `references/claude-md-daily.md` | `./Daily/CLAUDE.md` |
-| Business | `references/claude-md-intelligence.md` | `./Intelligence/CLAUDE.md` |
-| Business | `references/claude-md-resources.md` | `./Resources/CLAUDE.md` |
-| Business | `references/claude-md-skills.md` | `./Skills/CLAUDE.md` |
-| Business | `references/claude-md-departments.md` | `./Departments/CLAUDE.md` |
-| Business | `references/claude-md-team.md` | `./Team/CLAUDE.md` |
-| Business | `references/claude-md-onboarding.md` | `./Onboarding/CLAUDE.md` |
-| Business | `references/claude-md-processes.md` | `./Intelligence/processes/CLAUDE.md` |
+| Reference File | Creates at Local Path |
+|---|---|
+| `references/claude-md-context.md` | `./Context/CLAUDE.md` |
+| `references/claude-md-projects.md` | `./Projects/CLAUDE.md` |
+| `references/claude-md-daily.md` | `./Daily/CLAUDE.md` |
+| `references/claude-md-intelligence.md` | `./Intelligence/CLAUDE.md` |
+| `references/claude-md-resources.md` | `./Resources/CLAUDE.md` |
+| `references/claude-md-skills.md` | `./Skills/CLAUDE.md` |
 
-For each row applicable to the selected mode: read the reference file, then write its content to the local path.
+For each row: read the reference file, then write its content to the local path.
+
+### Step A.2b: Create the `agents.md` twin
+
+The root OS instruction file must exist under both names: `CLAUDE.md` (read automatically by Claude) and `agents.md` (the cross-tool standard read by other AI agents). They are the same physical file, kept in sync via a symlink, so editing one updates both.
+
+After writing `./CLAUDE.md`, create the twin:
+
+```bash
+ln -sf CLAUDE.md agents.md
+```
+
+If the filesystem does not support symlinks (rare on macOS, possible on some Windows setups), fall back to a copy and tell the user the two files must be kept in sync manually:
+
+```bash
+ln -sf CLAUDE.md agents.md 2>/dev/null || cp CLAUDE.md agents.md
+```
+
+Verify `./agents.md` resolves to the same content as `./CLAUDE.md` before continuing.
 
 ### Step A.3: Initialize Starter Context Files
 
-**All modes**, create placeholder skill folders:
+Create placeholder skill folders:
 
 ```bash
 mkdir -p Skills/linkedin-writer/references
@@ -176,16 +133,8 @@ Then write placeholder files from references:
 - Read `references/skills-placeholder-newsletter-strategy.md` → write to `./Skills/newsletter-writer/strategy.md`
 - Read `references/skills-placeholder-newsletter-example.md` → write to `./Skills/newsletter-writer/references/example-edition.md`
 
-**Solopreneurs/Professionals mode:**
+Then write the starter context file:
 - Read `references/context-me.md` → write to `./Context/me.md`
-
-**Business mode:**
-- Read `references/context-operator.md` → write to `./Context/operator.md`
-- Read `references/context-organization.md` → write to `./Context/organization.md`
-- Read `references/context-team.md` → write to `./Context/team.md`
-- Read `references/context-strategy-business.md` → write to `./Context/strategy.md`
-
-**Business mode, `Team/` is created empty in Phase A.** Profile-first scaffolding (`Team/{org}/Profiles/{person}/...`) happens in Phase B Build Step 3 once Q6 answers identify the actual people.
 
 ### Step A.4: Make Hooks Executable
 
@@ -196,8 +145,8 @@ chmod +x .claude/hooks/*.sh
 ### Step A.5: Confirm Bootstrap
 
 Tell the user:
-- "Vault structure created successfully in **[mode]** mode."
-- List the main folders created (varies by mode), including `Skills/`
+- "Vault structure created successfully."
+- List the main folders created, including `Skills/`
 - Recommend opening this folder as a vault in Obsidian
 - Recommend installing **TaskNotes** community plugin if they want task management features
 - Note that **Bases** (native database views) are built into Obsidian, no plugin needed for queries
@@ -298,7 +247,7 @@ And one header at the top of `<form class="elicit">`:
 </div>
 ```
 
-Reuse the SVG icon pattern from the `os-optimizer` `Audit run details` widget (clipboard-with-marks icon). Form titles: "You & business", "Customer & brand", "How you operate" (solo), or "You & company", "Offer, customer & brand", "How the company operates" (business).
+Reuse the SVG icon pattern from the `os-optimizer` `Audit run details` widget (clipboard-with-marks icon). Form titles: "You & business", "Customer & brand", "How you operate".
 
 ### Reading form submissions
 
@@ -327,11 +276,11 @@ After each form returns, for each category (N = 1..4 in this form):
 
 Merge everything into the corpus tagged by category. Then immediately fire the next form. No commentary or summarization between forms.
 
-Both modes use Oskar's category breakdown. Bullet inspiration prompts are Oskar's prompt blocks verbatim, plus Ben's framing of "brain-dump anything around any of these bullets."
+Bullet inspiration prompts are Oskar's prompt blocks verbatim, plus Ben's framing of "brain-dump anything around any of these bullets."
 
 ---
 
-### Solopreneurs/Professionals mode, 3 forms × 4 categories
+### The 3 forms × 4 categories
 
 **Form 1, You & business**, one `mcp__visualize__show_widget` call. Title: `os_setup_form_1_you_business`. Contains Q1–Q4 as stacked `elicit-group` blocks.
 
@@ -427,118 +376,6 @@ Bullets:
 
 ---
 
-### Business/Teams mode, 3 forms × 4 categories
-
-Same question shape as solo mode. Three `AskUserQuestion` calls, four questions each.
-
-**Form 1, You & company**, one `mcp__visualize__show_widget` call. Title: `os_setup_form_1_you_company`. Contains Q1–Q4 as stacked `elicit-group` blocks.
-
-**Q1. You, as operator.** Header: `Operator`
-Bullets:
-- Name, title, department, who you report to
-- Decision authority (what you can sign off on alone)
-- Location, working style
-- What's draining your attention right now, unclosed loops, decisions sitting unmade
-
-**Q2. The company.** Header: `Company`
-Bullets:
-- Legal entity name, industry, stage
-- Founded year, headcount (FT + contractors)
-- Headquarters and where the team is based
-- One-sentence mission
-- Why the company started (origin)
-- The belief or POV the company stands for
-
-**Q3. The market.** Header: `Market`
-Bullets:
-- The broad target industry
-- The specific niche you operate in
-- Trends and hot topics in the industry right now
-- What's not going well in the industry, the inefficiency or broken thing you're betting against
-- What changed in the last 5–10 years
-- The main players (incumbents, competitors, adjacent categories)
-
-**Q4. What you sell.** Header: `Lines`
-Bullets (for each revenue line):
-- Name, what it does, who buys it
-- Current revenue baseline, status (active, new, sunsetting)
-
-**Form 2, Offer, customer & brand**, one `mcp__visualize__show_widget` call. Title: `os_setup_form_2_offer_customer_brand`. Contains Q5–Q8 as stacked `elicit-group` blocks.
-
-**Q5. The promise.** Header: `Offer`
-Bullets:
-- The 1–3 problems you solve for customers
-- For each: are customers already aware they have it, or do you teach them?
-- Value proposition in one sentence
-- The promise or guarantee you make
-- Key features and capabilities that deliver the value
-- Why customers actually pick you over alternatives
-- The kind of results you typically deliver, include a real example if you have one
-
-**Q6. The customer.** Header: `ICP`
-Bullets:
-- Who's in charge of buying, title, role, responsibilities
-- What their day looks like, what tools they use
-- The language and words *they* use to describe their problem
-- Dream outcome they want
-- Situation before buying, what triggered them to look
-- How long the buying decision typically takes
-- Market trends affecting them right now
-- Media, podcasts, or creators they follow
-- 3–5 real examples (LinkedIn profiles or company names)
-
-**Q7. The brand voice and look.** Header: `Voice`
-Bullets:
-- Tagline and value prop in plain language
-- Voice in a paragraph or as descriptors (direct, warm, dry, technical…)
-- 5 attributes that describe how the brand sounds
-- Signature phrases used across your content
-- Words or phrases you'd never use
-- Topics you love covering
-- Topics you avoid publicly
-- Brand colors, fonts, logo notes
-- The feeling readers and customers should carry away
-
-**Q8. The positioning.** Header: `Position`
-Bullets:
-- The enemy, the category, status quo, or competitor archetype you're fighting
-- How you solve the problem *differently* from obvious competitors
-- Brand personality in 5 adjectives
-- The "big concept" the company is built on
-- 3–4 distinct messages you want associated with the brand
-
-**Form 3, How the company operates**, one `mcp__visualize__show_widget` call. Title: `os_setup_form_3_how_company_operates`. Contains Q9–Q12 as stacked `elicit-group` blocks.
-
-**Q9. The team.** Header: `Team`
-Bullets:
-- The departments and the lead for each
-- Team members getting their own profile folders. For each: name, role, reports-to, FT or contractor, location
-- (Profile folders include their own daily notes, tasks, and sub-schedules.)
-
-**Q10. This year's OKRs.** Header: `OKRs`
-Bullets:
-- 1–3 objectives for the year (or quarter)
-- For each KR: target number, owner, current status
-- The *why* behind each objective
-- What you're explicitly saying no to in order to focus here
-
-**Q11. Active projects.** Header: `Projects`
-Bullets (for each project):
-- Name, owner, status, deadline if any
-- Client-facing or internal
-- Which business unit or department it sits under
-- Key collaborators
-
-**Q12. Stack, workflows, and stakeholders.** Header: `Stack`
-Bullets:
-- Stack across communication, meetings, CRM, PM, content, finance, dev
-- Source of truth for each main workflow, where deals live, where decisions live, where writing happens, where the calendar lives
-- Top 3 painful, repetitive workflows. Template:
-  When **X** happens → we do **Y** → it takes **Z** → output is **W** → what we want is **V**
-- External stakeholders: investors, partners, vendors, top clients. Name, type, nature of the relationship.
-
----
-
 The user submits each form with one click. Per-category response patterns:
 - Type / paste a brain dump, transcript, links, docs, or file paths into the textarea
 - Leave the textarea blank to skip that category
@@ -552,7 +389,7 @@ The user submits each form with one click. Per-category response patterns:
 
 ## Phase B+: Additional Context Drop
 
-After Q12 (or "skip all") and **before** Phase B Build, ask one final `AskUserQuestion` to invite any leftover source material that didn't surface during the 12 categories. Most users still have brand decks, About pages, intake forms, LinkedIn URLs, Notion docs, PDFs, slide exports, voice/style guides, OKR docs, org charts, project briefs, etc. Always ask, even if Q1–Q12 looked rich.
+After Q12 (or "skip all") and **before** Phase B Build, ask one final `AskUserQuestion` to invite any leftover source material that didn't surface during the 12 categories. Most users still have brand decks, About pages, intake forms, LinkedIn URLs, Notion docs, PDFs, slide exports, voice/style guides, OKR docs, project briefs, etc. Always ask, even if Q1–Q12 looked rich.
 
 **Call AskUserQuestion** (one question, header: `Context`):
 - Question: "Anything else I should pull from before building? Upload files (PDFs, MDs, DOCXs), paste links (LinkedIn, websites, Notion pages, Google Docs), point me at a local folder, or paste raw text. The more I have, the more personalized your vault will be, instead of template scaffolds with placeholders."
@@ -601,11 +438,7 @@ A finished context file should read as a real human-written document about the u
 
 ### Build Step 1: Create Context Files
 
-Behavior depends on selected mode.
-
-For every file below, source data from BOTH the Q answers AND the Phase B+ corpus (uploaded files, fetched links, folder reads). The corpus typically contains the depth, Q answers are anchors.
-
-**Solopreneurs/Professionals mode** (Q1–Q12 = solo brain-dump categories):
+For every file below, source data from BOTH the Q answers AND the Phase B+ corpus (uploaded files, fetched links, folder reads). The corpus typically contains the depth, Q answers are anchors. (Q1–Q12 = the solo brain-dump categories.)
 
 - **`Context/me.md`**, Always created. Fill from Q1 (name, role, location, peer-intro line, attributes, working style) + Q2 (origin / POV / wedge / enemy) + Q12 (drains, unclosed loops) + corpus. Read `references/context-me.md` as scaffold.
 - **`Context/business.md`**, Only if Q3 had content. Fill from Q3 (revenue lines: name, what it does, who it's for, stage, baseline, origin) + corpus (About page, business overview docs). Read `references/context-business.md` as scaffold.
@@ -617,23 +450,9 @@ For every file below, source data from BOTH the Q answers AND the Phase B+ corpu
 - **`Context/team.md`**, Only if Q10 had content (people / collaborators) or corpus has a team / contractor list. Read `references/context-team.md` as scaffold.
 - **`Context/infrastructure.md`**, Only if Q11 (stack) or Q12 (workflows) had content, or corpus has a stack doc. Combine tool stack (Q11) + workflows-to-automate (Q12). Read `references/context-infrastructure.md` as scaffold.
 
-**Business mode** (Q1–Q12 = business brain-dump categories):
-
-- **`Context/operator.md`**, Always created. Fill from Q1 (name, title, reports-to, decision authority, working style, drains) + corpus. Read `references/context-operator.md` as scaffold.
-- **`Context/organization.md`**, Always created. Fill from Q2 (legal name, industry, stage, founded year, headcount, HQ, mission, origin, POV) + corpus (About page, company deck). Read `references/context-organization.md` as scaffold.
-- **`Context/market.md`**, Only if Q3 had content or corpus has market / industry material. Fill industry, niche, trends, what's broken, last 5–10y shifts, main players. Read `references/context-market.md` as scaffold.
-- **`Context/services.md`**, Only if Q4 had content. Fill revenue lines from Q4 + corpus (sales deck, product pages). Read `references/context-services.md` as scaffold.
-- **`Context/pain-points.md`**, Only if Q5 surfaced problems or corpus has them. Include awareness signal from Q5. Read `references/context-pain-points.md` as scaffold.
-- **`Context/icp.md`**, Only if Q6 had content or corpus has ICP material. Fill role, day, language, dream outcome, trigger, decision time, market trends, media, examples. Read `references/context-icp.md` as scaffold.
-- **`Context/brand.md`**, Only if Q7 (voice) or Q8 (positioning) had content or corpus has brand material. From Q7 take tagline, voice descriptors, signature phrases, words-to-avoid, topics, colors/fonts, feeling. From Q8 take enemy, differentiation, personality adjectives, big concept, key messages. Read `references/context-brand.md` as scaffold.
-- **`Context/team.md`**, Always created. Fill from Q9 (departments + leads, team members) + corpus (org chart). Read `references/context-team.md` as scaffold.
-- **`Context/strategy.md`**, Always created. Fill from Q10 (objectives, KRs, owners, why, explicit nos) + corpus (OKR doc). Read `references/context-strategy-business.md` as scaffold.
-- **`Context/infrastructure.md`**, Only if Q12 listed tools or workflows, or corpus has a stack / SOPs doc. Combine tool stack + sources of truth + workflows-to-automate from Q12. Read `references/context-infrastructure.md` as scaffold.
-- **`Context/stakeholders.md`**, Only if Q12 mentioned external stakeholders or corpus has investor / partner / client lists. Read `references/context-stakeholders.md` as scaffold.
-
 ### Build Step 2: Create Project Folders
 
-Solo: from Q9 (active projects). Business: from Q11 (active projects / initiatives). Plus any project briefs / Notion exports / project lists in the corpus. Intelligently structure each project based on what the user gave you.
+From Q9 (active projects), plus any project briefs / Notion exports / project lists in the corpus. Intelligently structure each project based on what the user gave you.
 
 **Analyze the info and decide the right structure:**
 - Simple mention ("working on a podcast") → just a `README.md`
@@ -657,7 +476,6 @@ Solo: from Q9 (active projects). Business: from Q11 (active projects / initiativ
 type: project
 status: active
 owner: [name]
-business: [business unit if applicable]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
@@ -676,39 +494,7 @@ updated: YYYY-MM-DD
 
 Don't create empty subdirs. Don't cram everything into the README. Distribute content into the right files based on what it actually is.
 
-**Business mode only**, from Q9 + corpus, also create `Departments/{name}/README.md` for each department with the lead's name, charter placeholder, and `sops/` subfolder.
-
-### Build Step 3: Profile-First Team Scaffolding (Business mode only)
-
-From Q9 + corpus (org chart, team roster), scaffold each person's profile workspace. Slug names are kebab-case.
-
-`{org-slug}` is derived from Q2 (company name → kebab-case). If no company name given, default to `team`.
-
-For each FT employee:
-```bash
-mkdir -p Team/{org-slug}/Profiles/{person-slug}/Daily
-mkdir -p Team/{org-slug}/Profiles/{person-slug}/task-list
-mkdir -p Team/{org-slug}/Profiles/{person-slug}/sub-schedules
-```
-Then write:
-- Read `references/team-profile-template.md` → write to `./Team/{org-slug}/Profiles/{person-slug}/{Person Name}.md`. Fill frontmatter and sections from Q9 (name, role, reports-to, FT, location) + corpus.
-- Read `references/team-tasks-template.md` → write to `./Team/{org-slug}/Profiles/{person-slug}/task-list/Tasks.md`.
-
-For each contractor / advisor:
-```bash
-mkdir -p Team/External/contractors/{person-slug}
-```
-Then write the same `team-profile-template.md` (with `employment: contractor` or `advisor`) → `./Team/External/contractors/{person-slug}/{Person Name}.md`.
-
-If Q9 + corpus list no team members, don't scaffold anything under `Team/{org-slug}/Profiles/`. Leave `Team/` with just the `CLAUDE.md` routing index.
-
-### Build Step 4: Mode-specific Additional Setup
-
-**Business mode only:**
-- If Q12 or corpus mentioned org-wide processes / SOPs, capture them in `Intelligence/processes/{name}.md`
-- If user provided onboarding docs in the corpus, route them to `Onboarding/{name}.md`
-
-### Build Step 5: Create First Daily Note
+### Build Step 3: Create First Daily Note
 
 Create `Daily/YYYY-MM-DD.md` (today's date):
 ```markdown
@@ -724,10 +510,10 @@ date: YYYY-MM-DD
 - **Next Steps**: [based on what was discussed]
 ```
 
-### Build Step 6: Confirm Completion
+### Build Step 4: Confirm Completion
 
 Tell the user:
-- Quick summary of what was created (which context files, how many projects, any departments, any team profiles)
+- Quick summary of what was created (which context files, how many projects)
 - "Open this folder in Obsidian to see your vault"
 - "You can add more context anytime, just tell me and I'll update the right files."
 - Suggest a next action based on what they told you
@@ -735,7 +521,6 @@ Tell the user:
 
 ## Guidelines
 
-- Phase 0 is one question, mode selection
 - Phase A is fully automated, no user input needed
 - Phase B is **12 categories** (Oskar's structure), batched into **3 rich-HTML forms** rendered via `mcp__visualize__show_widget` (Cowork-only). Each form has 4 stacked categories with title, bullet inspiration, and a single free-text textarea per category. It's a guided **brain dump**, not a Q&A box. The bullets are inspiration, not strict asks. Always recommend Whisper / dictation + pasting docs / links / file paths into the textarea
 - No follow-ups, no drilling deeper between forms

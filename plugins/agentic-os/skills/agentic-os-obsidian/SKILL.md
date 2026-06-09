@@ -46,7 +46,7 @@ Use `AskUserQuestion` for each. Capture answers into variables for substitution 
 
 ### Q1. Organization name
 "What's your organization or personal brand name? (Used in folder paths and dashboard header. Short — one word ideal.)"
-Default if skipped: `MyOrg`. Variable: `ORG_NAME`.
+Default if skipped: `SoloHQ`. Variable: `ORG_NAME`.
 
 ### Q2. Brand label + subtitle
 "What should the dashboard show as its title?" Two parts:
@@ -279,6 +279,12 @@ fi
 ```
 
 If empty, fall through to `AskUserQuestion` asking for the full path or to skip. If skipped, **omit the `claude` profile entirely** rather than ship a broken one.
+
+> [!important] When `claude` is absent (blank-Mac default), guard the CLI-dependent features
+> A brand-new Mac has no `claude` binary (and often no Node). If `CLAUDE_BIN` stays empty after the probe and the user doesn't supply a path, the install must still succeed, just without the features that need the CLI. Specifically:
+> - **Omit the "Launch Claude" button** from the generated button list (Q8). It fires `terminal:open-terminal.claude.root`, which throws a raw FileNotFoundError when no `claude` profile exists. Do not ship it without a resolved binary.
+> - **Omit the ccusage "Claude usage" card** by default (it shells out to `npx ccusage`, which needs Node). The dashboard JS already degrades gracefully to an "unavailable, install the Claude CLI to enable" note, but don't lead with a dead card.
+> - **Tell the user plainly** in the final summary: "Launch Claude and the Claude-usage card are disabled because the Claude CLI isn't installed. Install it (and Node), then re-run this skill to enable them." Re-running with a resolved `CLAUDE_BIN` adds both back.
 
 ```json
 {

@@ -562,10 +562,10 @@ class dashboard {
   // ===================================================================
   shellHTML({ title, eyebrow, sidebarItems, topActions, viewsHTML, backHref, brandLabel, brandSub, avatar }) {
     const _brandLabel = brandLabel || this.constructor.CONFIG.BRAND_LABEL;
-    const _brandSub   = brandSub   || "Agentic OS";
+    const _brandSub   = brandSub   || "Command Center";
     const _markHTML = avatar
       ? `<img src="${avatar}" alt="${this.esc(_brandLabel)}"/>`
-      : "B";
+      : "S";
     const sidebarHTML = sidebarItems.map(item => {
       if (item.divider) return `<div class="cc-nav-divider"></div>`;
       const attrs = item.view ? `data-view="${item.view}"` : (item.cmd ? `data-cmd="${item.cmd}"` : `data-href="${this.esc(item.href || "")}"`);
@@ -1395,9 +1395,16 @@ class dashboard {
     const existing = await this.loadCCUsage();
     if (existing?.fetched_at && (Date.now() - existing.fetched_at) < maxAgeMs) return;
     window._ccUsageRefreshing = true;
+    // Mark the usage card unavailable (CLI/Node/ccusage missing) so the empty state
+    // shows an honest message instead of "Fetching…" forever. Cleared on success.
+    const markUnavailable = () => {
+      if (existing) return; // we already have data to show; don't downgrade it
+      window._ccUsageUnavailable = true;
+      try { this.renderCCUsageStrips(null); } catch {}
+    };
     try {
       let spawn;
-      try { spawn = require("child_process").spawn; } catch { return; }
+      try { spawn = require("child_process").spawn; } catch { markUnavailable(); window._ccUsageRefreshing = false; return; }
       const shellPath = process.env.SHELL || "/bin/zsh";
       const cwd = this.vaultBasePath();
       const child = spawn(shellPath, ["-l", "-c", "npx -y ccusage@latest monthly --json"], {
@@ -1408,7 +1415,8 @@ class dashboard {
       child.stderr.on("data", () => {}); // npx is noisy on stderr, ignore
       child.on("close", async (code) => {
         window._ccUsageRefreshing = false;
-        if (code !== 0) return;
+        if (code !== 0) { markUnavailable(); return; }
+        window._ccUsageUnavailable = false;
         try {
           const parsed = JSON.parse(out);
           const agg = this.aggregateCCUsage(parsed);
@@ -1424,9 +1432,10 @@ class dashboard {
           console.warn("[dashboard] ccusage parse/write failed", e);
         }
       });
-      child.on("error", () => { window._ccUsageRefreshing = false; });
+      child.on("error", () => { window._ccUsageRefreshing = false; markUnavailable(); });
     } catch (e) {
       window._ccUsageRefreshing = false;
+      markUnavailable();
       console.warn("[dashboard] refreshCCUsage spawn failed", e);
     }
   }
@@ -1498,10 +1507,15 @@ class dashboard {
 
   ccusageStripHTML(agg) {
     if (!agg) {
+      // No snapshot. If a refresh already failed because the Claude CLI / Node / ccusage
+      // isn't installed on this machine, say so honestly instead of "Fetching…" forever.
+      const msg = window._ccUsageUnavailable
+        ? "Claude usage unavailable — install the Claude CLI (and Node) to enable this card."
+        : "No ccusage snapshot yet. Fetching in background…";
       return `
         <div class="cc-usage-strip" data-ccu-strip style="display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:12px;border:1px solid var(--background-modifier-border,#020309);border-radius:10px;background:#fff;color:#020309;font-size:12px;">
           <strong style="font-size:13px;">Claude usage</strong>
-          <span style="opacity:0.65;">No ccusage snapshot yet. Fetching in background…</span>
+          <span style="opacity:0.65;">${this.esc(msg)}</span>
         </div>`;
     }
     const ageSec = agg.fetched_at ? Math.round((Date.now() - agg.fetched_at) / 1000) : null;
@@ -2807,7 +2821,7 @@ class dashboard {
     const viewsHTML = overviewHTML + intelligenceHTML + researchHTML + communityHTML + youtubeHTML + commsHTML + meetingsHTML + profileRunsHTML;
 
     return this.shellHTML({
-      title: `${name} · Agentic OS`,
+      title: `${name} · SoloHQ`,
       eyebrow: `PROFILE · ${today.toFormat("EEEE, MMM d")}`,
       backHref: "Dashboard/Home",
       brandLabel: name,
