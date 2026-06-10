@@ -52,6 +52,7 @@ Use that absolute path as the prefix for every reference read in Phase A and Pha
 ```bash
 mkdir -p .claude
 mkdir -p Context
+mkdir -p Clients
 mkdir -p Projects
 mkdir -p Daily
 mkdir -p Resources
