@@ -12,7 +12,27 @@ It works alongside you instead of waiting for prompts. It reads and writes your 
 
 ## Install
 
-You need a capable AI client that can read files and run skills: **Claude Code** or the **Claude desktop app** (Cowork).
+You need an AI client that can read files and run skills. SoloHQ works with the **Claude desktop app** (the easiest path for most people) and **Claude Code** (the terminal version, for technical users). Mac or PC. A paid Claude plan is required to run plugins.
+
+SoloHQ is two free plugins: `core` sets up your vault, memory, and voice. `agentic-os` adds the Obsidian command-center dashboard. Install both.
+
+### Claude desktop app (recommended)
+
+1. Open the Claude desktop app.
+2. Go to **Customize → Plugins**.
+3. Under **Personal plugins**, click **+** and choose **Add marketplace**.
+4. Paste this URL and confirm:
+
+   ```
+   https://github.com/successt/solohq
+   ```
+
+5. The SoloHQ marketplace appears with two plugins, **core** and **agentic-os**. Click the **+** next to each one to install both.
+6. Start a new conversation and type `/os-setup` (or just say "set up SoloHQ").
+
+> **Install only from the SoloHQ list you just added.** The plugin browser also shows Anthropic's own tiles with similar-sounding names (like `setup-cowork` and `cowork-plugin-management`). Those are not SoloHQ. The two you want are **core** and **agentic-os**, listed under the marketplace you added in step 4.
+
+### Claude Code (terminal)
 
 ```
 /plugin marketplace add successt/solohq
@@ -20,17 +40,20 @@ You need a capable AI client that can read files and run skills: **Claude Code**
 /plugin install agentic-os@solohq
 ```
 
-`core` sets up your vault, memory, and voice. `agentic-os` adds the Obsidian command-center dashboard. Both are free.
+Then run `/os-setup`.
 
-Then run setup:
+### Updating SoloHQ
 
-```
-/setup
-```
+Marketplaces pin to the version that existed when you added them, so reinstalling a plugin by itself will NOT pull the latest release. To update:
+
+1. Go to **Customize → Plugins**, remove the SoloHQ marketplace.
+2. Add it back (steps 3 to 5 above) and reinstall **core** and **agentic-os**.
+
+In Claude Code: `/plugin marketplace update solohq`, or remove and re-add the marketplace.
 
 ## What happens when you set it up
 
-1. **Setup builds your vault.** It creates your folder structure, your memory system, and your assistant's instructions, all as plain markdown in a folder you own. Your assistant's memory is wired in automatically, no technical steps.
+1. **Setup builds your vault.** It creates your folder structure, your memory system, and your assistant's instructions, all as plain markdown in a folder you own. Your assistant's memory is wired in automatically, no technical steps. When you want the visual command-center dashboard, say "set up agentic OS in Obsidian" and the `agentic-os` plugin builds it inside your vault.
 2. **Part 1, Find Your Voice.** A short interview captures how you actually communicate, so your assistant writes like you, not like generic AI. This is the moment it stops feeling like a tool and starts feeling like it knows you. Just say "build my blueprint."
 3. **Part 2, Map Your Business & Story.** A deeper, reflective pass that maps what you have built, where you came from, and the honest gaps holding you back, then hands you a real fix in your own voice. Come back to it whenever you are ready by saying "map my business." Also free.
 

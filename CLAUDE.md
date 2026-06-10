@@ -13,13 +13,19 @@ This repo is the SoloHQ marketplace. It ships two free plugins:
 
 ## Install (for members)
 
+**Claude desktop app (the path most members use):** Customize → Plugins → under Personal plugins click **+** → **Add marketplace** → paste `https://github.com/successt/solohq` → install **core** and **agentic-os** with the **+** next to each. Watch out for Anthropic's similar-sounding tiles (`setup-cowork`, `cowork-plugin-management`); the SoloHQ plugins are the two under the marketplace you just added.
+
+**Claude Code (terminal):**
+
 ```
 /plugin marketplace add successt/solohq
 /plugin install core@solohq
 /plugin install agentic-os@solohq
 ```
 
-Then run `/setup` to bootstrap your vault, and say `build my blueprint` to capture your voice.
+Then run `/os-setup` to bootstrap your vault, and say `build my blueprint` to capture your voice.
+
+**Updating:** marketplaces pin to the commit they were added at. Reinstalling a plugin alone serves the stale pinned version; remove and re-add the marketplace (desktop) or `/plugin marketplace update solohq` (Claude Code) to pull latest.
 
 ## Repo Layout
 
