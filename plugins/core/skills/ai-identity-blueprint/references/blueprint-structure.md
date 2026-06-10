@@ -1,6 +1,6 @@
 # Blueprint output structure
 
-The exact shape of the three files the [AI Identity Blueprint](../SKILL.md) writes. Keep the member's own words wherever possible. Write in their voice, not a corporate template voice. No em dashes anywhere.
+The exact shape of the three files the [AI Identity Blueprint](../SKILL.md) writes. Keep the member's own words wherever possible. Write in their voice, not a corporate template voice. Default to no em dashes (they are the most recognizable AI-writing tell), UNLESS the member's own writing samples use them: their real voice always wins.
 
 ---
 
