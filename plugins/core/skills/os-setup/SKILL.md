@@ -1,6 +1,6 @@
 ---
 name: os-setup
-description: The SoloHQ vault setup. Bootstrap the SoloHQ vault structure and run personalized onboarding. Creates all directories, system files, Obsidian config, memory system, hooks, and output styles, then interviews the user to personalize everything. This is the SoloHQ setup (run this), NOT Anthropic's generic setup-cowork. Use when user says "set up my vault", "bootstrap", "initialize SoloHQ", "onboarding", or runs /os-setup.
+description: The SoloHQ vault setup. Bootstrap the SoloHQ vault structure and run personalized onboarding. Creates all directories, system files, and the memory system, then interviews the user to personalize everything. Works the same on Mac and Windows. This is the SoloHQ setup (run this), NOT Anthropic's generic setup-cowork. Use when user says "set up my vault", "bootstrap", "initialize SoloHQ", "onboarding", or runs /os-setup.
 ---
 
 # SoloHQ, Setup + Onboarding
@@ -42,7 +42,12 @@ If the Read tool can't open a `references/...` path directly (some harnesses mou
 
 ```bash
 # Find the references directory; cache the result for the rest of Phase A.
-find / -type d -path '*/setup/references' 2>/dev/null | head -1
+# Search $HOME first: it covers plugin install locations on Mac AND Windows Git Bash
+# (where ~ maps to C:/Users/<name>, while / maps only to the Git installation dir,
+# so a root scan would MISS the real drive on Windows). Fall back to / only if empty.
+REFS=$(find ~ -type d -path '*setup/references' 2>/dev/null | head -1)
+[ -z "$REFS" ] && REFS=$(find / -type d -path '*setup/references' 2>/dev/null | head -1)
+echo "$REFS"
 ```
 
 Use that absolute path as the prefix for every reference read in Phase A and Phase B. Don't retry path resolution per-file, do it once and reuse.
@@ -103,21 +108,19 @@ For each row: read the reference file, then write its content to the local path.
 
 ### Step A.2b: Create the `agents.md` twin
 
-The root OS instruction file must exist under both names: `CLAUDE.md` (read automatically by Claude) and `agents.md` (the cross-tool standard read by other AI agents). They are the same physical file, kept in sync via a symlink, so editing one updates both.
+The root OS instruction file must exist under both names: `CLAUDE.md` (the master, read automatically by Claude) and `agents.md` (the cross-tool standard read by other AI agents). The sync guarantee does NOT come from the filesystem; it comes from Rule 23 in the OS instruction file itself, which makes the AI re-copy `CLAUDE.md` over `agents.md` after every edit whenever `agents.md` is a plain file. A symlink, where the filesystem supports it, is just an optimization that makes that rule a no-op.
 
-After writing `./CLAUDE.md`, create the twin:
-
-```bash
-ln -sf CLAUDE.md agents.md
-```
-
-If the filesystem does not support symlinks (rare on macOS, possible on some Windows setups), fall back to a copy and tell the user the two files must be kept in sync manually:
+After writing `./CLAUDE.md`, create the twin, preferring a symlink and falling back to a copy:
 
 ```bash
 ln -sf CLAUDE.md agents.md 2>/dev/null || cp CLAUDE.md agents.md
 ```
 
-Verify `./agents.md` resolves to the same content as `./CLAUDE.md` before continuing.
+On Windows, `ln -s` frequently degrades to a copy (Git Bash default) or fails without Developer Mode, so EXPECT the copy path there; do not treat it as an error and do not tell the user something went wrong. The OS keeps the twin in sync either way.
+
+Verify before continuing:
+1. `./agents.md` exists and its content is identical to `./CLAUDE.md`.
+2. The OS instruction file you just wrote contains the agents.md sync rule (Rule 23, "Keep `agents.md` identical to `CLAUDE.md`"). If it is missing, the copy fallback has no sync mechanism and the twin WILL drift; fix the instruction file before continuing.
 
 ### Step A.3: Initialize Starter Context Files
 
@@ -137,13 +140,7 @@ Then write placeholder files from references:
 Then write the starter context file:
 - Read `references/context-me.md` → write to `./Context/me.md`
 
-### Step A.4: Make Hooks Executable
-
-```bash
-chmod +x .claude/hooks/*.sh
-```
-
-### Step A.5: Confirm Bootstrap
+### Step A.4: Confirm Bootstrap
 
 Tell the user:
 - "Vault structure created successfully."

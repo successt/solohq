@@ -42,7 +42,7 @@ This is the single source of truth for what you must do. Rules are grouped for s
 20. **Notes are standalone and composable**, like Lego blocks. No orphans: link every new note from at least one existing note. Never add a `# Title` heading that duplicates the filename (Obsidian shows the filename as the title).
 21. **YAML frontmatter on every note** (`type`, `date`, `status`, `tags`, `project`, `priority` as applicable).
 22. **Use callouts** (`> [!type] Title`) for structure: `important` for decisions, `todo` for actions, `tip` for wins, `warning` for blockers, `question` for open items. Use `==highlights==` sparingly for critical info and `%%comments%%` for internal notes hidden in preview.
-23. **Never use em dashes anywhere.** Not in responses, vault notes, code, or quotes. Use commas, periods, colons, or line breaks instead.
+23. **Keep `agents.md` identical to `CLAUDE.md`, and YOU are the sync mechanism.** Never edit `agents.md` directly; `CLAUDE.md` is the master. After ANY edit to `CLAUDE.md`, check whether `agents.md` is a separate real file rather than a symlink (`ls -la agents.md`, or on Windows: compare content). If it is a separate file, copy `CLAUDE.md` over it in the same session. On systems where setup could not create a symlink (most Windows machines), this rule is the ONLY thing keeping the two files in sync; where the symlink exists, this check is a free no-op. An out-of-sync `agents.md` silently feeds stale instructions to every non-Claude AI.
 
 ### F. Tools & efficiency
 24. **Two tiers, and Tier A must always work.** This system runs with ZERO extra installs (Tier A): plain-markdown notes, file reads and writes, wikilinks. An optional enhanced layer (Tier B: Obsidian app, the TaskNotes plugin, CLI helpers, Bases) adds queryable power for users who want it. Every rule below degrades gracefully: if a Tier B tool is not present, fall back to Tier A. Never make the user install anything just to get a basic action done.
@@ -193,7 +193,7 @@ status: completed
 
 ## About This System
 
-This vault is the user's brain and the single source of truth for all of their AI agents: info about the user, their clients, and their projects. These instructions apply to ANY AI working in this vault. The file is served under two names, `claude.md` and `agents.md` (the cross-tool standard), kept identical so any AI tool reads the same operating system.
+This vault is the user's brain and the single source of truth for all of their AI agents: info about the user, their clients, and their projects. These instructions apply to ANY AI working in this vault. The file is served under two names, `CLAUDE.md` (the master, read automatically by Claude) and `agents.md` (the cross-tool standard read by other AI agents), kept identical so any AI tool reads the same operating system. Where the filesystem supports it, `agents.md` is a symlink and sync is automatic; where it is a plain copy (common on Windows), Rule 37 makes the AI itself re-copy `CLAUDE.md` over `agents.md` after every edit. Either way, only ever edit `CLAUDE.md`.
 
 
 <!-- USER CORRECTIONS: Add new numbered rules under the Teaching loop as the user teaches you -->

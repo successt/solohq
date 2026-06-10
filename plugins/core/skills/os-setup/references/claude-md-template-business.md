@@ -98,9 +98,8 @@ Standard fields: `type`, `date`, `project`, `department`, `status`, `tags`, `pri
 11. Tasks → active profile's `task-list/Tasks.md` (Task Board emoji format). Never root `Tasks/`.
 12. Web content extraction: `defuddle parse <url> --md` over raw web fetch.
 13. Never save drafts or assets to root. Store in the right folder.
-14. NEVER use em dashes. Use periods, commas, colons, or restructure.
-15. Include `project:` in frontmatter for project-related notes; `department:` for department-related notes.
-16. NEVER create files/folders in vault root. Every file lives in an existing folder. No exceptions.
+14. Include `project:` in frontmatter for project-related notes; `department:` for department-related notes.
+15. NEVER create files/folders in vault root. Every file lives in an existing folder. No exceptions.
 
 ## Anti-Patterns
 
