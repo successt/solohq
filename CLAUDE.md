@@ -4,23 +4,22 @@ The free foundation of the **Sovereign Agency OS**: a local AI operating system 
 
 ## What This Is
 
-This repo is the SoloHQ marketplace. It ships two free plugins:
+This repo is the SoloHQ marketplace. It ships one released plugin and holds one unlisted:
 
-| Plugin | Skills | Purpose |
-|--------|--------|---------|
-| **core** | `os-setup`, `ai-identity-blueprint`, `business-and-story-map` | Bootstraps your vault (folders, `CLAUDE.md`, memory system), then runs the two-part identity onboarding: Part 1 (Find Your Voice) and Part 2 (Map Your Business & Story). |
-| **agentic-os** | `agentic-os-obsidian` | Installs a command-center dashboard inside your Obsidian vault (5 bundled plugins, Home + per-profile + Vault Overview pages, button bar wired to Claude prompts). |
+| Plugin | Status | Skills | Purpose |
+|--------|--------|--------|---------|
+| **core** | Released | `os-setup`, `ai-identity-blueprint`, `business-and-story-map` | Bootstraps your vault (folders, `CLAUDE.md`, memory system), then runs the two-part identity onboarding: Part 1 (Find Your Voice) and Part 2 (Map Your Business & Story). |
+| **agentic-os** | UNLISTED (2026-06-10) | `agentic-os-obsidian` | Installs a command-center dashboard inside your Obsidian vault (5 bundled plugins, Home + per-profile + Vault Overview pages, button bar wired to Claude prompts). Parked in `.claude-plugin/unlisted-plugins.json` until redesigned solo-shaped; code stays in the repo. To release: move its entry back into `marketplace.json`, run `sync-skills.sh` + `build-zips.sh`, push. |
 
 ## Install (for members)
 
-**Claude desktop app (the path most members use):** Customize → Plugins → under Personal plugins click **+** → **Add marketplace** → paste `https://github.com/successt/solohq` → install **core** and **agentic-os** with the **+** next to each. Watch out for Anthropic's similar-sounding tiles (`setup-cowork`, `cowork-plugin-management`); the SoloHQ plugins are the two under the marketplace you just added.
+**Claude desktop app (the path most members use):** Customize → Plugins → under Personal plugins click **+** → **Add marketplace** → paste `https://github.com/successt/solohq` → install **core** with the **+** next to it. Watch out for Anthropic's similar-sounding tiles (`setup-cowork`, `cowork-plugin-management`); the SoloHQ plugin is the one under the marketplace you just added.
 
 **Claude Code (terminal):**
 
 ```
 /plugin marketplace add successt/solohq
 /plugin install core@solohq
-/plugin install agentic-os@solohq
 ```
 
 Then run `/os-setup` to bootstrap your vault, and say `build my blueprint` to capture your voice.

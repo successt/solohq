@@ -1,0 +1,21 @@
+{
+  "comment": "Plugins parked here are OFF (not served to members) but NOT deleted. Claude only reads marketplace.json, so nothing in this file is installable. To release a plugin, move its object into the plugins array of marketplace.json, then run sync-skills.sh and build-zips.sh and push. Decision 2026-06-10: agentic-os (the dashboard) deferred from the launch until it is redesigned solo-shaped and Greg has learned it; members will receive it later via the documented marketplace update path.",
+  "plugins": [
+    {
+      "name": "agentic-os",
+      "source": "./plugins/agentic-os",
+      "description": "The SoloHQ Obsidian dashboard: a command-center vault with auto-installed plugins (Dataview, Terminal, Homepage) and Home + per-profile dashboards wired to Claude. Free.",
+      "version": "1.0.0",
+      "author": {
+        "name": "SoloHQ"
+      },
+      "keywords": [
+        "solohq",
+        "obsidian",
+        "dashboard",
+        "agentic-os",
+        "second-brain"
+      ]
+    }
+  ]
+}

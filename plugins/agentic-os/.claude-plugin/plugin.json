@@ -1,6 +1,6 @@
 {
   "name": "agentic-os",
-  "description": "The SoloHQ Obsidian dashboard: a command-center vault with auto-installed plugins (Dataview, Terminal, Homepage) and Home + per-profile dashboards wired to Claude. Free.",
+  "description": "",
   "version": "1.0.0",
   "author": {
     "name": "SoloHQ"

@@ -26,22 +26,6 @@
         "memory",
         "identity"
       ]
-    },
-    {
-      "name": "agentic-os",
-      "source": "./plugins/agentic-os",
-      "description": "The SoloHQ Obsidian dashboard: a command-center vault with auto-installed plugins (Dataview, Terminal, Homepage) and Home + per-profile dashboards wired to Claude. Free.",
-      "version": "1.0.0",
-      "author": {
-        "name": "SoloHQ"
-      },
-      "keywords": [
-        "solohq",
-        "obsidian",
-        "dashboard",
-        "agentic-os",
-        "second-brain"
-      ]
     }
   ]
 }
