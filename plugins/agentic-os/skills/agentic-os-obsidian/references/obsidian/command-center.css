@@ -99,7 +99,7 @@ body.is-readable-line-width .command-center .markdown-preview-sizer {
 /* Centered card with spinner + brand text */
 .command-center .markdown-preview-view:not(:has(.cc-root))::after,
 .command-center .markdown-reading-view:not(:has(.cc-root))::after {
-  content: "Loading your agentic OS…";
+  content: "Loading your SoloHQ dashboard…";
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);

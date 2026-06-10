@@ -72,7 +72,7 @@ class dashboard {
     root.innerHTML = `
       <div class="cc-loader-shell">
         <div class="cc-loader-spinner"></div>
-        <div class="cc-loader-text">Loading your agentic OS…</div>
+        <div class="cc-loader-text">Loading your SoloHQ dashboard…</div>
       </div>`;
 
     try {
@@ -691,7 +691,7 @@ class dashboard {
     el.innerHTML = `
       <div class="cc-loader-shell">
         <div class="cc-loader-spinner"></div>
-        <div class="cc-loader-text">Loading your agentic OS…</div>
+        <div class="cc-loader-text">Loading your SoloHQ dashboard…</div>
       </div>`;
     document.body.appendChild(el);
 
@@ -2825,7 +2825,7 @@ class dashboard {
       eyebrow: `PROFILE · ${today.toFormat("EEEE, MMM d")}`,
       backHref: "Dashboard/Home",
       brandLabel: name,
-      brandSub: "Agentic OS",
+      brandSub: "Command Center",
       avatar: this.avatarFor(name),
       sidebarItems: [
         { icon: "home",     label: "Overview",     view: "overview", active: true },
